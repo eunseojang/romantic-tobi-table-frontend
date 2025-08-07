@@ -1,15 +1,31 @@
-import { Button, Text } from "@chakra-ui/react";
-import { PwaInstallButton } from "./PwaInstallButton";
+// src/App.tsx
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { MobileLayout } from "./MobileLayout";
+import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: (
+      <MobileLayout>
+        <HomePage />
+      </MobileLayout>
+    ),
+  },
+  {
+    path: "/about",
+    element: (
+      <MobileLayout>
+        <AboutPage />
+      </MobileLayout>
+    ),
+  },
+]);
 
 function App() {
   return (
-    <>
-      <PwaInstallButton />
-      <Button />
-      <Text fontFamily="Dotum">구미 돋움체Welcome to Tobi!</Text>
-      <Text fontFamily="Romance">구미 낭만체 Welcome to Tobi!</Text>
-      <Text color={"tobi-brown.700"}>sdfsf가나다</Text>
-    </>
+      <RouterProvider router={router} />
   );
 }
 
