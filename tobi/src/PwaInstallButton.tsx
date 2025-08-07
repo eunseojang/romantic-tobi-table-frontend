@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, VStack, Text } from "@chakra-ui/react";
-import { toaster } from "@/components/ui/toaster";
+import { toaster } from "./components/ui/toaster";
 
 const isIos = () => /iphone|ipad|ipod/i.test(window.navigator.userAgent);
 const isInStandaloneMode = () =>
