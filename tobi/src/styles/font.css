@@ -1,0 +1,14 @@
+/* src/styles/font.css */
+@font-face {
+  font-family: 'Dotum';
+  src: url('../assets/fonts/Gumi Dotum.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Romance';
+  src: url('../assets/fonts/Gumi Romance.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
