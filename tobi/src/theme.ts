@@ -5,8 +5,21 @@ const config = defineConfig({
   theme: {
     tokens: {
       colors: {
-        brand: {
-          "500": { value: "tomato" },
+        "tobi-yellow": {
+          100: { value: "#FFF8E7" }, // 아주 연한 배경
+          200: { value: "#FAF4E7" }, // 25%
+          300: { value: "#F4EDDC" }, // 50%
+          400: { value: "#FFA336" }, // 서브 노랑
+          500: { value: "#FDC63D" }, // 메인 노랑
+        },
+        "tobi-brown": {
+          700: { value: "#5C4B3B" }, // 진한 브라운
+        },
+        "tobi-gray": {
+          600: { value: "#999999" }, // 중간 회색
+        },
+        "tobi-white": {
+          DEFAULT: { value: "#FFFFFF" }, // 흰색
         },
       },
       fonts: {
