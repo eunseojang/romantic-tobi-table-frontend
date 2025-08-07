@@ -1,5 +1,5 @@
 // src/pages/HomePage.tsx
-import { PwaInstallButton } from "@/PwaInstallButton";
+import { PwaInstallButton } from "../PwaInstallButton";
 import { Box, Text, Button } from "@chakra-ui/react";
 
 export default function HomePage() {
