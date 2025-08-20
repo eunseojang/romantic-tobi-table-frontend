@@ -1,5 +1,5 @@
 // src/components/ui/Toaster.tsx
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 
 interface Toast {
