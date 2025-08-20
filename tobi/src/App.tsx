@@ -5,7 +5,7 @@ import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/signup/SignUpPage";
 import "./styles/font.css";
 import LoginPage from "./pages/login/LoginPage";
-import ToasterContainer from "./components/ui/Toaster";
+import ToasterContainer from "./components/ui/toaster";
 
 const router = createBrowserRouter([
   {
