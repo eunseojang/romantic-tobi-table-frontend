@@ -1,16 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ChakraProvider } from "@chakra-ui/react";
 import App from "./App";
-import { system } from "./theme";
-import { Toaster } from "@/components/ui/toaster"; // 경로는 환경에 맞게 조절
+import "./styles/index.css";
 import "./styles/font.css"; // 폰트 스타일 적용
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ChakraProvider value={system}>
-      <App />
-      <Toaster />
-    </ChakraProvider>
+    <App />
   </React.StrictMode>
 );

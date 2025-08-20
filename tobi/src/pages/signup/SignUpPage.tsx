@@ -1,10 +1,10 @@
 // src/pages/AboutPage.tsx
 import React from 'react';
 
-export default function HomePage() {
+export default function SignUpPage() {
   return (
     <div className="p-4">
-      <p className="text-xl font-bold"> gha 화면</p>
+      <p className="text-xl font-bold">sdfsdf 화면</p>
       <button
         className="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out"
       >

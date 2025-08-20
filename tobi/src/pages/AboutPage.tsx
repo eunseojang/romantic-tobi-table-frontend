@@ -1,11 +1,15 @@
 // src/pages/AboutPage.tsx
-import { Box, Text, Button } from "@chakra-ui/react"
+import React from 'react';
 
 export default function AboutPage() {
   return (
-    <Box p={4}>
-      <Text fontSize="xl" fontWeight="bold">about 화면</Text>
-      <Button mt={4} colorScheme="yellow">테스트 버튼</Button>
-    </Box>
-  )
+    <div className="p-4">
+      <p className="text-xl font-bold">about 화면</p>
+      <button
+        className="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out"
+      >
+        테스트 버튼
+      </button>
+    </div>
+  );
 }
