@@ -1,12 +1,12 @@
 // src/pages/signup/SignUpPage.tsx
 import React, { useState } from "react";
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios"; // API 요청을 위해 axios 임포트
 import SignUpStep1Form from "./SignUpStep1Form";
-import { toaster } from "@/components/ui/toaster";
 import SignUpStep2Form from "./SignUpStep2Form";
 import SignUpStep3Form from "./SignUpStep3Form";
-import { API_BASE_URL } from "@/assets/Env";
+import { API_BASE_URL } from "src/assets/Env";
+import { toaster } from "src/components/ui/toaster";
 
 // 회원가입 폼 데이터 타입 정의
 interface SignUpFormData {
@@ -15,7 +15,7 @@ interface SignUpFormData {
   birthday: string; // YYYY-MM-DD 형식으로 가정
   nickname: string;
   gender: "MALE" | "FEMALE" | "OTHER" | ""; // 실제 API 스키마에 맞게 조정
-  allowNotification: boolean;
+  allowNotification: boolean | null;
 }
 
 const SignUpPage: React.FC = () => {
@@ -68,11 +68,7 @@ const SignUpPage: React.FC = () => {
         // 필요에 따라 데이터 가공
       };
 
-
-      const response = await axios.post(
-        `${API_BASE_URL}/api/auth/signup`,
-        dataToSend
-      );
+      await axios.post(`${API_BASE_URL}/api/auth/signup`, dataToSend);
       toaster.create({
         title: "회원가입 성공",
         description: "로그인 페이지로 이동합니다.",

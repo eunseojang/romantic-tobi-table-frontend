@@ -1,5 +1,5 @@
 // src/layouts/MobileLayout.tsx
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 /**
  * 모바일 뷰포트 크기를 시뮬레이션하고 자식 컴포넌트가 높이를 채우도록 하는 레이아웃 컴포넌트입니다.

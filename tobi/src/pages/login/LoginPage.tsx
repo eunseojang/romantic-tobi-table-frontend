@@ -1,9 +1,9 @@
 // src/pages/LoginPage.tsx
-import { API_BASE_URL } from "@/assets/Env";
-import { toaster } from "@/components/ui/toaster";
 import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "src/assets/Env";
+import { toaster } from "src/components/ui/toaster";
 
 interface LoginFormData {
   userId: string;

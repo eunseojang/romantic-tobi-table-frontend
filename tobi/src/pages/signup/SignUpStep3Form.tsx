@@ -1,7 +1,7 @@
 // src/pages/signup/SignUpStep3Form.tsx
-import ProgressBar from "@/components/ui/ProgressBar";
-import { toaster } from "@/components/ui/toaster";
+import { toaster } from "src/components/ui/toaster";
 import React from "react";
+import ProgressBar from "src/components/ui/ProgressBar";
 
 interface SignUpStep3FormProps {
   formData: {

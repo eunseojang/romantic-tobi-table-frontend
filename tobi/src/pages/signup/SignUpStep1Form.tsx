@@ -1,9 +1,9 @@
 // src/pages/signup/SignUpStep1Form.tsx
 import React, { useState } from "react";
 import axios from "axios";
-import ProgressBar from "@/components/ui/ProgressBar";
-import { toaster } from "@/components/ui/toaster";
-import { API_BASE_URL } from "@/assets/Env";
+import { toaster } from "src/components/ui/toaster";
+import ProgressBar from "src/components/ui/ProgressBar";
+import { API_BASE_URL } from "src/assets/Env";
 
 // SignUpFormData에서 필요한 필드만 가져옵니다.
 interface SignUpStep1FormProps {
