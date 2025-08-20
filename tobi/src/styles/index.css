@@ -1,7 +1,23 @@
 @import "tailwindcss";
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@import "./font.css"; /* ✨ 이 줄이 있는지, 경로가 맞는지 확인 */
+
+html,
+body,
+#root {
+  height: 100%; /* HTML, body, root가 뷰포트 전체 높이를 차지하도록 */
+  width: 100%; /* HTML, body, root가 뷰포트 전체 너비를 차지하도록 */
+  margin: 0; /* 기본 마진 제거 */
+  padding: 0; /* 기본 패딩 제거 */
+  overflow-x: hidden; /* 가로 스크롤 방지 */
+}
+
+/* body에 flex를 주어 하위 #root가 높이를 채우도록 할 수도 있습니다. */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+#root {
+  flex-grow: 1;
 }

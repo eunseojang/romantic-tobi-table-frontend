@@ -1,14 +1,24 @@
 /* src/styles/font.css */
 @font-face {
-  font-family: 'Dotum';
-  src: url('../assets/fonts/Gumi Dotum.ttf') format('truetype');
+  font-family: "Dotum";
+  src: url("../assets/fonts/Gumi Dotum.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
+  font-display: swap; /* 이거 있는지 다시 한번 확인 */
 }
 
 @font-face {
-  font-family: 'Romance';
-  src: url('../assets/fonts/Gumi Romance.ttf') format('truetype');
+  font-family: "Romance";
+  src: url("../assets/fonts/Gumi Romance.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
+  font-display: swap; /* 이거 있는지 다시 한번 확인 */
+}
+
+.font-Dotum {
+  font-family: "Dotum", sans-serif;
+}
+
+.font-Romance {
+  font-family: "Romance", sans-serif;
 }
