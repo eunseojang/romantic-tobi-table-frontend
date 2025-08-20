@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 // Chakra UI의 Button, VStack, Text 대신 일반 HTML 태그와 Tailwind CSS 클래스를 사용합니다.
 // toaster는 그대로 사용한다고 가정합니다.
 import { toaster } from "./components/ui/toaster"; // `toaster` 경로가 올바른지 확인해주세요.
