@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-// Chakra UI의 Button, VStack, Text 대신 일반 HTML 태그와 Tailwind CSS 클래스를 사용합니다.
-// toaster는 그대로 사용한다고 가정합니다.
 import { toaster } from "./components/ui/toaster"; // `toaster` 경로가 올바른지 확인해주세요.
 
 // iOS 기기인지 확인하는 함수
@@ -19,72 +17,67 @@ const isInStandaloneMode = () => {
 };
 
 export const PwaInstallButton = () => {
+  // `useState(true)`로 임시 설정되어 있어 항상 iOS 안내가 보이는 상태
+  // 실제 사용 시에는 주석 처리된 원래의 `useState(false)`로 복원해야 합니다.
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [showIosInstall, setShowIosInstall] = useState(false);
+  const [showIosInstall, setShowIosInstall] = useState(false); // 이 부분을 실제 사용 시에는 `false`로 변경하세요.
 
   useEffect(() => {
-    // 클라이언트 측에서만 실행되도록 window 객체 확인
     if (typeof window !== "undefined") {
       if (isIos() && !isInStandaloneMode()) {
         setShowIosInstall(true);
       }
 
       const handler = (e: Event) => {
-        // 'any' 대신 'Event' 타입 사용
         e.preventDefault();
         setDeferredPrompt(e);
       };
-      // 'beforeinstallprompt' 이벤트 리스너 추가
       window.addEventListener("beforeinstallprompt", handler);
 
-      // 클린업 함수
-      return () => {
-        window.removeEventListener("beforeinstallprompt", handler);
-      };
+      return () => window.removeEventListener("beforeinstallprompt", handler);
     }
   }, []);
 
   const handleAndroidInstall = () => {
     if (!deferredPrompt) return;
 
-    // PWA 설치 프롬프트 띄우기
     deferredPrompt.prompt();
-    // 사용자 선택 결과 처리
     deferredPrompt.userChoice.then((choiceResult: { outcome: string }) => {
       if (choiceResult.outcome === "accepted") {
         toaster.create({
           title: "PWA 설치 성공",
           description: "앱이 설치되었습니다.",
+          type: "success", // Success type added
         });
       } else {
         toaster.create({
           title: "PWA 설치 취소됨",
           description: "설치를 취소하셨습니다.",
+          type: "warning", // Warning type added
         });
       }
-      setDeferredPrompt(null); // 프롬프트 사용 후 상태 초기화
+      setDeferredPrompt(null);
     });
   };
 
   return (
-    // VStack -> div에 flex, flex-col, gap-4 클래스 적용
-    <div className="flex flex-col gap-4 items-center justify-center p-4">
+    // ✨ 부모 div에 w-full, px-4, gap-4를 추가하고 justify-center 수정
+    <div className="flex flex-col items-center justify-center w-full px-4 gap-2 font-dotum">
+      {" "}
+      {/* text-Dotum -> font-dotum */}
       {/* Android 설치 버튼 */}
       {deferredPrompt && (
         <button
           onClick={handleAndroidInstall}
-          // Chakra UI의 colorScheme="teal" 대신 Tailwind CSS 클래스 적용
-          className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out"
+          className="w-full bg-black hover:bg-tobi-yellow-400 text-[#fff] py-3 rounded-lg shadow-md transition duration-300 ease-in-out font-bold"
         >
           Android에 PWA 설치하기
         </button>
       )}
-
       {/* iOS 설치 안내 */}
       {showIosInstall && (
         <>
-          {/* Text -> p 태그 사용 */}
-          <p className="text-center text-gray-700">
+          <p className="text-center text-gray-700 text-[10px]">
             iOS Safari에서 공유 버튼 → '홈 화면에 추가'를 눌러 설치하세요.
           </p>
           <button
@@ -94,8 +87,7 @@ export const PwaInstallButton = () => {
                 description: "Safari 공유 버튼 → 홈 화면에 추가 선택",
               })
             }
-            // Chakra UI의 colorScheme="teal" 대신 Tailwind CSS 클래스 적용
-            className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out"
+            className="w-full bg-black hover:bg-tobi-yellow-400 text-[#fff] py-3 rounded-lg shadow-md transition duration-300 ease-in-out font-bold"
           >
             iOS 설치 방법 보기
           </button>

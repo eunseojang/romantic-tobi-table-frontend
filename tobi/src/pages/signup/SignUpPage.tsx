@@ -124,7 +124,7 @@ const SignUpPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col flex-grow bg-[#fff] font-dotum relative p-4">
+    <div className="flex flex-col flex-grow bg-[#FFFDF9]  font-dotum relative p-4">
       {/* 뒤로가기 버튼 */}
       <button
         onClick={goToPreviousStep} // goToPreviousStep 호출

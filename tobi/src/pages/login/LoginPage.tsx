@@ -1,4 +1,5 @@
 // src/pages/LoginPage.tsx
+import { PwaInstallButton } from "@/PwaInstallButton";
 import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -115,7 +116,7 @@ const LoginPage: React.FC = () => {
         </div>
       </div>
       {/* 하단 여백 (모바일 하단 바 등을 위한) */}
-      <div className="flex-grow"></div>{" "}
+      <div className="flex-grow"></div> <PwaInstallButton />
       {/* 남은 공간을 채워서 콘텐츠를 상단에 배치 */}
       <div className="h-10"></div> {/* 하단 여백 */}
     </div>
