@@ -5,6 +5,8 @@ import { MobileLayout } from "./MobileLayout";
 import LoginPage from "./pages/login/LoginPage";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import ToasterContainer from "./components/ui/toaster";
+import StoreListPage from "./pages/StoreListPage";
+import MyPage from "./pages/MyPage";
 
 const router = createBrowserRouter([
   {
@@ -35,10 +37,14 @@ const router = createBrowserRouter([
         path: "/",
         element: <HomePage />, // 이 경로는 이제 ProtectedRoute의 보호를 받습니다.
       },
-      // {
-      //   path: "/mypage",
-      //   element: <MyPage />,
-      // },
+      {
+        path: "/store-list",
+        element: <StoreListPage />, // 이 경로는 이제 ProtectedRoute의 보호를 받습니다.
+      },
+      {
+        path: "/mypage",
+        element: <MyPage />,
+      },
     ],
   },
 ]);
