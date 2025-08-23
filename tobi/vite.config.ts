@@ -16,6 +16,7 @@ export default defineConfig({
         enabled: true,
       },
       workbox: {
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         globPatterns: ["**/*.{js,css,html,ico,png,svg,ttf}"],
         // ✨ 이 부분을 추가/수정합니다.
         navigateFallback: "/", // 모든 내비게이션 요청을 루트 경로(index.html)로 되돌립니다.
