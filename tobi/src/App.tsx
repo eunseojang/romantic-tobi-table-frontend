@@ -7,6 +7,7 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 import ToasterContainer from "./components/ui/toaster";
 import StoreListPage from "./pages/StoreListPage";
 import MyPage from "./pages/MyPage";
+import StartPage from "./pages/StartPage";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,9 @@ const router = createBrowserRouter([
       {
         path: "/mypage",
         element: <MyPage />,
+      }, {
+        path: "/start",
+        element: <StartPage />,
       },
     ],
   },

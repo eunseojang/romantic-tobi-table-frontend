@@ -62,8 +62,8 @@ const LoginPage: React.FC = () => {
         });
         navigate("/");
       }
-    } catch (error: any) {
-      console.error("로그인 실패:", error.response?.data || error.message);
+    } catch (error) {
+      console.error("로그인 실패:", error);
 
       toaster.create({
         title: "오류 발생",

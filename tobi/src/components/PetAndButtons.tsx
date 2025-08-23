@@ -1,8 +1,7 @@
 // src/components/common/PetAndButtons.tsx
 import React, { useState, useEffect } from "react";
-
-// ✨ petMessage prop을 제거합니다.
-interface PetAndButtonsProps {}
+import ReceiptUpload from "./RecieptUploadButton";
+import api from "@/api";
 
 type ActiveComponent = "none" | "feed" | "receipt";
 
@@ -10,6 +9,7 @@ type MentType = {
   feed: string[];
   receipt: string[];
   none: string[];
+  greeting: string[]; // ✨ 출석체크 멘트 추가
 };
 
 const Ment: MentType = {
@@ -32,20 +32,60 @@ const Ment: MentType = {
     "오늘도 함께 놀아요!",
     "토미와 함께하는 즐거운 하루!",
   ],
+  greeting: [
+    "오늘도 찾아와줘서 고마워!",
+    "어서 와! 기다렸어!",
+    "안녕! 오늘도 즐거운 하루 보내~!",
+    "오늘도 좋은 하루 보내!",
+  ],
 };
 
-const PetAndButtons: React.FC<PetAndButtonsProps> = () => {
+// ✨ 출석체크 보상 API 응답 타입 정의
+interface GreetingRewardResponse {
+  message: string;
+  remainingPoint: number;
+}
+
+const PetAndButtons: React.FC = () => {
   const [activeComponent, setActiveComponent] =
     useState<ActiveComponent>("none");
   const [currentMessage, setCurrentMessage] = useState("");
+  const [showReward, setShowReward] = useState<number | null>(null); // ✨ 보상 포인트 상태 추가 (null: 보상 없음)
 
+  // ✨ 컴포넌트 마운트 시 날짜 확인 및 출석체크 API 호출
   useEffect(() => {
+    const today = new Date().toDateString();
+    const lastVisit = localStorage.getItem("lastVisitDate");
+
+    if (lastVisit !== today) {
+      handleGreetingReward(today);
+    }
+
+    // `activeComponent`가 변경될 때마다 랜덤 메시지를 선택
     const messages = Ment[activeComponent];
     const randomIndex = Math.floor(Math.random() * messages.length);
     setCurrentMessage(messages[randomIndex]);
   }, [activeComponent]);
 
-  // ✨ 이 함수를 수정합니다.
+  // ✨ 출석체크 API 호출 핸들러
+  const handleGreetingReward = async (today: string) => {
+    try {
+      await api.post<GreetingRewardResponse>("/api/reward/greeting");
+
+      // 보상 성공
+      setShowReward(10); // 임시로 10포인트 보상 가정
+      setCurrentMessage(
+        Ment.greeting[Math.floor(Math.random() * Ment.greeting.length)]
+      );
+
+      // `localStorage`에 오늘 날짜 저장
+      localStorage.setItem("lastVisitDate", today);
+    } catch (error) {
+      // 그 외 실패
+      console.error("출석체크 보상 실패:", error);
+    }
+  };
+
   const handleButtonClick = (componentName: ActiveComponent) => {
     setActiveComponent((prevComponent) =>
       prevComponent === componentName ? "none" : componentName
@@ -61,11 +101,7 @@ const PetAndButtons: React.FC<PetAndButtonsProps> = () => {
           </div>
         );
       case "receipt":
-        return (
-          <div className="bg-gray-200 p-4 rounded-lg mt-4 mb-20 w-full h-32 flex items-center justify-center">
-            영수증 인증 컴포넌트
-          </div>
-        );
+        return <ReceiptUpload />;
       default:
         return null;
     }
@@ -73,6 +109,19 @@ const PetAndButtons: React.FC<PetAndButtonsProps> = () => {
 
   return (
     <div className="flex flex-col items-center w-full px-8 font-dotum mt-3">
+      {/* ✨ 보상 포인트 UI */}
+      {showReward !== null && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="relative w-24 h-24 rounded-full bg-[#FDC63D] flex flex-col items-center justify-center text-white font-bold text-lg p-2 shadow-lg animate-fade-in-up">
+            <span className="text-sm">토미가 주는</span>
+            <span className="text-xl">{showReward}P</span>
+            <p className="text-xs absolute -top-8 px-2 py-1 rounded-full bg-white text-gray-700">
+              은경
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* 액션 버튼들 */}
       <div className="w-full flex justify-center space-x-4">
         {/* '밥 주기' 버튼 */}

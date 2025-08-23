@@ -97,11 +97,8 @@ const SignUpStep1Form: React.FC<SignUpStep1FormProps> = ({
           type: "success",
         });
       }
-    } catch (error: any) {
-      console.error(
-        "아이디 중복 확인 실패:",
-        error.response?.data || error.message
-      );
+    } catch (error) {
+      console.error("아이디 중복 확인 실패:", error);
       setIsUserIdDuplicated(null);
       toaster.create({
         title: "오류 발생",

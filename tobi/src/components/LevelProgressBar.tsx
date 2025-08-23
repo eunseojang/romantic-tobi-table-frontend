@@ -3,7 +3,7 @@ import api from "@/api";
 import React, { useEffect, useState } from "react";
 import { PetData } from "./PointDisplay";
 
-const LevelProgressBar: React.FC = ({}) => {
+const LevelProgressBar: React.FC = () => {
   const [exp, setExp] = React.useState<number>(0);
   const [level, setLevel] = React.useState<number>(1);
   const [loading, setLoading] = useState(true);

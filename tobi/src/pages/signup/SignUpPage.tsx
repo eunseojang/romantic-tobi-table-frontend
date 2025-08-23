@@ -69,17 +69,34 @@ const SignUpPage: React.FC = () => {
       };
 
       await axios.post(`${API_BASE_URL}/api/auth/signup`, dataToSend);
+
+      const response = await axios.post(
+        `${API_BASE_URL}/api/auth/login`,
+        formData,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data) {
+        if (response.data.accessToken) {
+          localStorage.setItem("accessToken", response.data.accessToken);
+        }
+      }
+      navigate("/start"); // 성공 시 로그인 페이지로 이동
+
       toaster.create({
         title: "회원가입 성공",
-        description: "로그인 페이지로 이동합니다.",
+        description: "시작 페이지로 이동합니다.",
         type: "success",
       });
-      navigate("/login"); // 성공 시 로그인 페이지로 이동
-    } catch (error: any) {
-      console.error("회원가입 실패:", error.response?.data || error.message);
+    } catch (error) {
+      console.error("회원가입 실패:", error);
       toaster.create({
         title: "회원가입 실패",
-        description: error.response?.data?.message || "다시 시도해주세요.",
+        description: "다시 시도해주세요.",
         type: "error", // toaster에 type이 있다면
       });
     }

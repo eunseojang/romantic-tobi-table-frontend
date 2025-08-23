@@ -1,7 +1,6 @@
 // src/pages/MyPage.tsx
 import React, { useEffect, useState } from "react";
 import { FaCrown, FaUtensils } from "react-icons/fa";
-import api from "@/api"; // API 인스턴스 임포트
 import PointDisplay from "@/components/PointDisplay";
 import BottomHandleBar from "@/components/BottomNavBar";
 import birthdayIcon from "@/assets/birthday.png"; // ✨ 이미지 파일을 임포트
@@ -18,16 +17,8 @@ interface UserInfo {
 const MyPage: React.FC = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  // 임시 사용자 정보 (API 연동 전)
-  const dummyUserInfo: UserInfo = {
-    level: 3,
-    nickname: "닉네임",
-    birthday: "2025-01-01",
-    badge: "반상 챌린저",
-    achievement: "토미 밥 10번 주기 성공!",
-  };
+
 
   // 실제 API 연동 로직
   // useEffect(() => {
@@ -46,16 +37,20 @@ const MyPage: React.FC = () => {
 
   // API 연동 전에는 더미 데이터 사용
   useEffect(() => {
+      // 임시 사용자 정보 (API 연동 전)
+  const dummyUserInfo: UserInfo = {
+    level: 3,
+    nickname: "닉네임",
+    birthday: "2025-01-01",
+    badge: "반상 챌린저",
+    achievement: "토미 밥 10번 주기 성공!",
+  };
     setUserInfo(dummyUserInfo);
     setLoading(false);
   }, []);
 
   if (loading) {
     return <div className="text-center p-4">로딩 중...</div>;
-  }
-
-  if (error) {
-    return <div className="text-center p-4 text-red-500">{error}</div>;
   }
 
   if (!userInfo) {
