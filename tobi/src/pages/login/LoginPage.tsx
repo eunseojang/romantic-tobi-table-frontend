@@ -3,7 +3,7 @@ import { PwaInstallButton } from "@/PwaInstallButton";
 import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "src/assets/Env";
+import { API_BASE_URL } from "@/Env";
 import { toaster } from "src/components/ui/toaster";
 
 interface LoginFormData {

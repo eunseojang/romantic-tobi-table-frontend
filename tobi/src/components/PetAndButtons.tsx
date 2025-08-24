@@ -2,6 +2,10 @@
 import React, { useState, useEffect } from "react";
 import ReceiptUpload from "./RecieptUploadButton";
 import api from "@/api";
+import { toaster } from "./ui/toaster";
+import FeedMenu from "./FeedMenu";
+import { ActionType } from "@/Image";
+import PetCharacterDisplay from "./PetDisplay";
 
 type ActiveComponent = "none" | "feed" | "receipt";
 
@@ -9,7 +13,7 @@ type MentType = {
   feed: string[];
   receipt: string[];
   none: string[];
-  greeting: string[]; // ✨ 출석체크 멘트 추가
+  greeting: string[];
 };
 
 const Ment: MentType = {
@@ -40,7 +44,6 @@ const Ment: MentType = {
   ],
 };
 
-// ✨ 출석체크 보상 API 응답 타입 정의
 interface GreetingRewardResponse {
   message: string;
   remainingPoint: number;
@@ -50,81 +53,77 @@ const PetAndButtons: React.FC = () => {
   const [activeComponent, setActiveComponent] =
     useState<ActiveComponent>("none");
   const [currentMessage, setCurrentMessage] = useState("");
-  const [showReward, setShowReward] = useState<number | null>(null); // ✨ 보상 포인트 상태 추가 (null: 보상 없음)
+  const [petAction, setPetAction] = useState<ActionType>("basic"); // ✨ 펫의 현재 동작 상태
 
-  // ✨ 컴포넌트 마운트 시 날짜 확인 및 출석체크 API 호출
   useEffect(() => {
-    const today = new Date().toDateString();
-    const lastVisit = localStorage.getItem("lastVisitDate");
-
-    if (lastVisit !== today) {
-      handleGreetingReward(today);
-    }
-
-    // `activeComponent`가 변경될 때마다 랜덤 메시지를 선택
     const messages = Ment[activeComponent];
     const randomIndex = Math.floor(Math.random() * messages.length);
     setCurrentMessage(messages[randomIndex]);
   }, [activeComponent]);
 
-  // ✨ 출석체크 API 호출 핸들러
-  const handleGreetingReward = async (today: string) => {
+  // ✨ 동작을 바꾸는 핸들러: duration 후에 기본 상태로 돌아옴
+  const handleActionWithTimeout = (
+    action: ActionType,
+    duration: number = 3000
+  ) => {
+    setPetAction(action);
+    setTimeout(() => {
+      setPetAction("basic");
+    }, duration);
+  };
+
+  const handleGreetingReward = async () => {
     try {
-      await api.post<GreetingRewardResponse>("/api/reward/greeting");
+      await api.post<GreetingRewardResponse>("/api/rewards/greeting");
 
-      // 보상 성공
-      setShowReward(10); // 임시로 10포인트 보상 가정
-      setCurrentMessage(
-        Ment.greeting[Math.floor(Math.random() * Ment.greeting.length)]
-      );
+      const randomGreeting =
+        Ment.greeting[Math.floor(Math.random() * Ment.greeting.length)];
+      setCurrentMessage(randomGreeting);
 
-      // `localStorage`에 오늘 날짜 저장
-      localStorage.setItem("lastVisitDate", today);
+      toaster.create({
+        title: "출석 인증 완료",
+        description: `포인트를 획득했습니다! 내일도 또 방문해 주실거죠?`,
+        type: "success",
+      });
+
+      handleActionWithTimeout("up", 3000); // ✨ 인사 성공 시 3초간 "hi" 동작
     } catch (error) {
-      // 그 외 실패
-      console.error("출석체크 보상 실패:", error);
+      console.error("출석 인증 실패:", error);
+      const errorMessage = `내일 다시 방문해주세요~~`;
+      toaster.create({
+        title: "출석 인증 실패",
+        description: errorMessage,
+        type: "error",
+      });
+      handleActionWithTimeout("basic", 0); // ✨ 실패 시 기본 동작 유지
     }
   };
 
   const handleButtonClick = (componentName: ActiveComponent) => {
-    setActiveComponent((prevComponent) =>
-      prevComponent === componentName ? "none" : componentName
-    );
+    setActiveComponent((prevComponent) => {
+      const newState = prevComponent === componentName ? "none" : componentName;
+      if (newState !== "none") {
+        handleActionWithTimeout("hi", 1000); // ✨ 버튼 클릭 시 1초간 "up" 동작
+      }
+      return newState;
+    });
   };
 
   const renderPlaceholder = () => {
     switch (activeComponent) {
       case "feed":
-        return (
-          <div className="bg-gray-200 p-4 rounded-lg mt-4 mb-20 w-full h-32 flex items-center justify-center">
-            밥 주기 컴포넌트
-          </div>
-        );
+        return <FeedMenu />;
       case "receipt":
-        return <ReceiptUpload />;
+        return <ReceiptUpload onSuccessAction={() => handleActionWithTimeout('up')} />;
       default:
         return null;
     }
   };
 
   return (
-    <div className="flex flex-col items-center w-full px-8 font-dotum mt-3">
-      {/* ✨ 보상 포인트 UI */}
-      {showReward !== null && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="relative w-24 h-24 rounded-full bg-[#FDC63D] flex flex-col items-center justify-center text-white font-bold text-lg p-2 shadow-lg animate-fade-in-up">
-            <span className="text-sm">토미가 주는</span>
-            <span className="text-xl">{showReward}P</span>
-            <p className="text-xs absolute -top-8 px-2 py-1 rounded-full bg-white text-gray-700">
-              은경
-            </p>
-          </div>
-        </div>
-      )}
-
+    <div className="flex flex-col items-center w-full px-4 font-dotum mt-3">
       {/* 액션 버튼들 */}
       <div className="w-full flex justify-center space-x-4">
-        {/* '밥 주기' 버튼 */}
         {activeComponent === "feed" ? (
           <button
             onClick={() => handleButtonClick("feed")}
@@ -159,16 +158,11 @@ const PetAndButtons: React.FC = () => {
       </div>
 
       {/* 토미 캐릭터 이미지 */}
-      <div className="flex-grow flex items-center justify-center my-8">
-        <div className="w-48 h-48 bg-[#FDC63D] rounded-full flex items-center justify-center relative shadow-lg">
-          {/* 눈 */}
-          <div className="absolute w-24 flex justify-between top-1/3">
-            <div className="w-4 h-4 bg-black rounded-full"></div>
-            <div className="w-4 h-4 bg-black rounded-full"></div>
-          </div>
-          {/* 입 */}
-          <div className="absolute w-6 h-2 bg-black top-1/2 mt-2 rounded-full"></div>
-        </div>
+      <div
+        className="flex-grow flex items-center justify-center my-2"
+        onClick={handleGreetingReward}
+      >
+        <PetCharacterDisplay actionType={petAction} />
       </div>
 
       {/* 토미의 말풍선 */}

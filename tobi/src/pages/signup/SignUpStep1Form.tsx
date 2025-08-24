@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toaster } from "src/components/ui/toaster";
 import ProgressBar from "src/components/ui/ProgressBar";
-import { API_BASE_URL } from "src/assets/Env";
+import { API_BASE_URL } from "@/Env";
 
 // SignUpFormData에서 필요한 필드만 가져옵니다.
 interface SignUpStep1FormProps {

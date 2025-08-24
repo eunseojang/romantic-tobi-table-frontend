@@ -3,8 +3,8 @@
 import React, { useRef, useState } from "react";
 import api from "@/api";
 import { FaSpinner } from "react-icons/fa";
-import { toaster } from "./ui/toaster";
 import axios from "axios";
+import { toaster } from "./ui/toaster";
 
 // API 응답 타입 정의 (성공 및 실패 케이스 모두 포함)
 interface ReceiptUploadResponse {
@@ -17,18 +17,23 @@ interface ReceiptUploadResponse {
   message: string;
 }
 
-const ReceiptUploadButton: React.FC = () => {
+// ✨ 새로운 props 인터페이스
+interface ReceiptUploadButtonProps {
+  onSuccessAction?: () => void;
+}
+
+const ReceiptUploadButton: React.FC<ReceiptUploadButtonProps> = ({
+  onSuccessAction,
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
 
-  // 파일 선택 버튼 클릭 핸들러
   const handleFileSelect = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
-  // 파일 입력 변경 및 즉시 업로드 핸들러
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
@@ -36,7 +41,6 @@ const ReceiptUploadButton: React.FC = () => {
     }
   };
 
-  // 파일 업로드 로직
   const handleUpload = async (file: File) => {
     setLoading(true);
     const formData = new FormData();
@@ -58,13 +62,18 @@ const ReceiptUploadButton: React.FC = () => {
         description: `${response.data.pointsEarned} 포인트를 획득했습니다!`,
         type: "success",
       });
+
+      // ✨ 성공 콜백 함수 호출
+      if (onSuccessAction) {
+        onSuccessAction();
+      }
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
     } catch (error: unknown) {
-      // ✨ any 대신 unknown 사용
       console.error("영수증 업로드 실패:", error);
-
       let errorMessage = "다시 시도해주세요.";
-
-      // ✨ Axios 에러인지 타입 가드로 확인
       if (
         axios.isAxiosError(error) &&
         error.response &&
@@ -75,7 +84,6 @@ const ReceiptUploadButton: React.FC = () => {
         errorMessage = (error.response.data as { error: string }).error;
         console.log(error.response.data);
       } else if (error instanceof Error) {
-        // 일반적인 JavaScript Error 객체인 경우
         errorMessage = error.message;
       }
 

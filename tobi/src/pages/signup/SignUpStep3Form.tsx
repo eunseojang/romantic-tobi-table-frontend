@@ -2,6 +2,7 @@
 import { toaster } from "src/components/ui/toaster";
 import React from "react";
 import ProgressBar from "src/components/ui/ProgressBar";
+import { petImageMap } from "@/Image";
 
 interface SignUpStep3FormProps {
   formData: {
@@ -40,11 +41,9 @@ const SignUpStep3Form: React.FC<SignUpStep3FormProps> = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full font-Dotum flex flex-col flex-grow px-4 pb-4 font-dotum relative" /* font-Dotum -> font-dotum */
+      className="w-full font-Dotum flex flex-col flex-grow px-3 pb-4 font-dotum relative" /* font-Dotum -> font-dotum */
     >
-      <p className="text-black text-sm mb-4">
-        {" "}
-        {/* text-[10px] -> text-sm, mb-1 -> mb-4 */}
+      <p className="text-black text-xs">
         알림을 켜두면 토미가 보내는 귀여운 소식들을 놓치지 않을 수 있어요!
       </p>
       <div className="space-y-4 flex-grow">
@@ -67,7 +66,8 @@ const SignUpStep3Form: React.FC<SignUpStep3FormProps> = ({
                 }
                 className="form-radio h-5 w-5 text-[#FDC63D] border-[#F7A400] focus:ring-[#FDC63D]"
               />
-              <span>토미의 소식 알림을 받을래요!</span> {/* 텍스트 수정 */}
+              <span className="text-sm">토미의 소식 알림을 받을래요!</span>{" "}
+              {/* 텍스트 수정 */}
             </label>
           </div>
           {/* "알림은 다음에 받을게요!" */}
@@ -87,14 +87,14 @@ const SignUpStep3Form: React.FC<SignUpStep3FormProps> = ({
                 }
                 className="form-radio h-5 w-5 text-[#FDC63D] border-[#F7A400] focus:ring-[#FDC63D]"
               />
-              <span>알림은 다음에 받을게요!</span>
+              <span className="text-sm">토미의 알림은 다음에 받을게요!</span>
             </label>
           </div>
         </div>
 
         {/* ✨ 말풍선과 토미 캐릭터 */}
-        <div className="mt-8 flex flex-col items-center">
-          <div className="relative bg-[#F4EDDC] p-4 rounded-xl shadow-md w-full max-w-sm before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:w-0 before:h-0 before:border-l-[15px] before:border-r-[15px] before:border-t-[15px] before:border-l-transparent before:border-r-transparent before:border-t-[#F4EDDC] before:mb-[-15px]">
+        <div className="mt-4 flex flex-col items-center">
+          <div className="relative bg-[#F4EDDC] p-2 py-3 rounded-xl shadow-md w-full max-w-sm before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:w-0 before:h-0 before:border-l-[15px] before:border-r-[15px] before:border-t-[15px] before:border-l-transparent before:border-r-transparent before:border-t-[#F4EDDC] before:mb-[-15px]">
             <p className="text-sm text-[#5C4B3B] text-center">
               "안녕! 나는 구미시 관광 캐릭터{" "}
               <span className="font-bold text-[#F7A400]">토미</span>야!{" "}
@@ -105,8 +105,12 @@ const SignUpStep3Form: React.FC<SignUpStep3FormProps> = ({
               느릿하고 귀여운 거북이야!"
             </p>
           </div>
-          <div className="mt-4 w-20 h-20 rounded-full bg-[#FDC63D] text-[#5C4B3B] flex items-center justify-center font-bold text-lg">
-            토미
+          <div className="flex items-center justify-center">
+            <img
+              src={petImageMap[1].none.basic}
+              alt={`레벨 1 토미 캐릭터`}
+              className="w-50"
+            />
           </div>
         </div>
       </div>

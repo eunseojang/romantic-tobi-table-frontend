@@ -1,18 +1,11 @@
 // src/pages/StartPage.tsx
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import LevelupIcon from "@/assets/levelup.png"; // ✨ 이미지 파일을 임포트
+import PetCharacterDisplay from "@/components/PetDisplay";
 
 const StartPage: React.FC = () => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // 이미 시작 페이지를 본 적이 있는지 확인
-    const hasSeenStartPage = localStorage.getItem("hasSeenStartPage");
-    if (hasSeenStartPage) {
-      navigate("/"); // 'home'은 예시 경로입니다. 실제 홈 페이지 경로로 변경하세요.
-    }
-  }, [navigate]);
 
   const handleNextClick = () => {
     // 시작 페이지를 봤다는 플래그를 localStorage에 저장
@@ -21,7 +14,7 @@ const StartPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col flex-grow items-center p-4 bg-white font-dotum relative">
+    <div className="flex flex-col flex-grow items-center p-4 font-dotum relative bg-[#FFFDF9]">
       {/* 상단 섹션: "포인트를 더 모으고 싶다면?" 메시지 및 공유 버튼 */}
       <div className="w-full flex justify-between items-center px-2 py-4">
         <div className="flex items-center space-x-2">
@@ -36,16 +29,7 @@ const StartPage: React.FC = () => {
           성장시키는 앱 서비스입니다!
         </p>
 
-        {/* 토미 캐릭터 이미지 */}
-        <div className="w-48 h-48 bg-[#FDC63D] rounded-full flex items-center justify-center relative shadow-lg my-8">
-          {/* 눈 */}
-          <div className="absolute w-24 flex justify-between top-1/3">
-            <div className="w-4 h-4 bg-black rounded-full"></div>
-            <div className="w-4 h-4 bg-black rounded-full"></div>
-          </div>
-          {/* 입 */}
-          <div className="absolute w-6 h-2 bg-black top-1/2 mt-2 rounded-full"></div>
-        </div>
+        <PetCharacterDisplay actionType="basic" />
 
         {/* 하단 설명 */}
         <div className="max-w-xs mb-5">

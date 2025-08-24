@@ -53,13 +53,15 @@ const StoreListPage: React.FC = () => {
   const searchStores = async () => {
     try {
       setLoading(true);
-      const response = await api.get<Store[]>("/api/stores/search", {
-        params: {
-          name: searchTerm,
-        },
-      });
-      // 검색 응답이 pagination이 없는 배열이므로 그대로 설정
-      setStores(response.data);
+      const response = await api.get<StoreListResponse[]>(
+        "/api/stores/search",
+        {
+          params: {
+            name: searchTerm,
+          },
+        }
+      );
+      setStores(response.data.content);
     } catch (err) {
       console.error("Failed to search stores:", err);
       setError("검색 결과를 불러오지 못했습니다.");

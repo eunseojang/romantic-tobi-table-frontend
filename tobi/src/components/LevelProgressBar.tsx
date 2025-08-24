@@ -9,7 +9,8 @@ const LevelProgressBar: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const progressPercentage = (exp / level) * 300 * 100;
+  const progressPercentage = exp / (level * 300);
+  console.log(progressPercentage)
   useEffect(() => {
     const fetchPetData = async () => {
       try {
@@ -49,17 +50,17 @@ const LevelProgressBar: React.FC = () => {
   return (
     <>
       <div>
-        <div className="flex items-center py-2 px-8 font-Dotum">
+        <div className="flex items-center py-2 px-6 font-Dotum">
           {/* 레벨 원 */}
           <div className="relative w-12 h-12 bg-[#fff] rounded-full flex items-center justify-center font-bold text-lg text-[#FDC63D] shadow-xl ring-2 ring-tobi-yellow-200">
             <span className=" text-black">Lv. {level}</span>
           </div>
           {/* 경험치 바 컨테이너 */}
-          <div className="relatvie flex-1 h-[10px] border text-[#FDC63D] relative overflow-hidden bg-tobi-yellow-200 items-center">
+          <div className="relatvie flex-1 w-[10px] h-[10px] border text-[#FDC63D] relative overflow-hidden bg-tobi-yellow-200 items-center">
             {/* 노란색 경험치 바 */}
             <div
               className="h-[5px] my-0.5 bg-[#FDC63D] transition-all duration-500 ease-out absolute left-0 top-0"
-              style={{ width: `${progressPercentage}%` }}
+              style={{ width: `${progressPercentage* 100}%` }}
             ></div>
           </div>
         </div>

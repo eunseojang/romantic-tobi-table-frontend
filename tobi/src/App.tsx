@@ -8,6 +8,12 @@ import ToasterContainer from "./components/ui/toaster";
 import StoreListPage from "./pages/StoreListPage";
 import MyPage from "./pages/MyPage";
 import StartPage from "./pages/StartPage";
+import AchievementPage from "./pages/AchivementPage";
+import UserWithdrawalPage from "./pages/UserWithdrawPage";
+import PasswordChangePage from "./pages/PasswordChangePage";
+import ReceiptListPage from "./pages/RecieptPage";
+import RewardListPage from "./pages/RewardListPage";
+import PointShopPage from "./pages/PointShopPage";
 
 const router = createBrowserRouter([
   {
@@ -39,15 +45,40 @@ const router = createBrowserRouter([
         element: <HomePage />, // 이 경로는 이제 ProtectedRoute의 보호를 받습니다.
       },
       {
+        path: "/point",
+        element: <PointShopPage />, // 이 경로는 이제 ProtectedRoute의 보호를 받습니다.
+      },
+      {
         path: "/store-list",
         element: <StoreListPage />, // 이 경로는 이제 ProtectedRoute의 보호를 받습니다.
       },
       {
         path: "/mypage",
         element: <MyPage />,
-      }, {
+      },
+      {
         path: "/start",
         element: <StartPage />,
+      },
+      {
+        path: "/achievements",
+        element: <AchievementPage />,
+      },
+      {
+        path: "/withdraw",
+        element: <UserWithdrawalPage />,
+      },
+      {
+        path: "/changePassword",
+        element: <PasswordChangePage />,
+      },
+      {
+        path: "/receipt",
+        element: <ReceiptListPage />,
+      },
+      {
+        path: "/rewards",
+        element: <RewardListPage />,
       },
     ],
   },

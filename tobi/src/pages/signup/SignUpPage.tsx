@@ -5,7 +5,7 @@ import axios from "axios"; // API 요청을 위해 axios 임포트
 import SignUpStep1Form from "./SignUpStep1Form";
 import SignUpStep2Form from "./SignUpStep2Form";
 import SignUpStep3Form from "./SignUpStep3Form";
-import { API_BASE_URL } from "src/assets/Env";
+import { API_BASE_URL } from "@/Env";
 import { toaster } from "src/components/ui/toaster";
 
 // 회원가입 폼 데이터 타입 정의

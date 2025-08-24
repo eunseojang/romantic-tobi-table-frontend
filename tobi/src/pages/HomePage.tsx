@@ -8,15 +8,16 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
-  const token = localStorage.getItem("accessToken");
   const navigate = useNavigate();
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
     if (!token) {
       navigate("/login");
     }
-  }, []);
+  }, [navigate]);
   return (
-    <div className="font-dotum mt-4">
+    <div className="font-dotum mt-4 bg-[#fff]">
       <div className="flex items-center justify-between px-7 ">
         <p
           className="text-[#8a725b] underline text-sm font-Romance cursor-pointer"
