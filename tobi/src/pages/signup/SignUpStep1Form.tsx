@@ -145,12 +145,12 @@ const SignUpStep1Form: React.FC<SignUpStep1FormProps> = ({
               placeholder="아이디"
               value={formData.userId}
               onChange={handleUserIdChange}
-              className="flex-grow p-3 rounded-lg border border-[#F7A400] bg-[#FFF8E7] placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#FDC63D] text-sm"
+              className="w-[70%] p-3 rounded-lg border border-[#F7A400] bg-[#FFF8E7] placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#FDC63D] text-sm"
             />
             <button
               type="button"
               onClick={handleCheckUserIdDuplication}
-              className="bg-[#FDC63D] hover:bg-tobi-yellow-400 text-[#5C4B3B] py-3.5 px-3 rounded-lg shadow-sm transition duration-300 ease-in-out text-sm whitespace-nowrap"
+              className="bg-[#FDC63D] w-[30%] hover:bg-tobi-yellow-400 text-[#5C4B3B] py-3.5 px-3 rounded-lg shadow-sm transition duration-300 ease-in-out text-sm whitespace-nowrap"
             >
               중복 확인
             </button>

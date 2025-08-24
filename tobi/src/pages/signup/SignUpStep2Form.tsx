@@ -49,7 +49,7 @@ const SignUpStep2Form: React.FC<SignUpStep2FormProps> = ({
         />
         {/* 생년월일 */}
         <input
-          type="date" // HTML5 date input type
+          type="date"
           placeholder="생년월일 (YYYY-MM-DD)"
           value={formData.birthday}
           onChange={(e) => updateFormData({ birthday: e.target.value })}
@@ -62,7 +62,6 @@ const SignUpStep2Form: React.FC<SignUpStep2FormProps> = ({
           <p className="text-[#999] mb-1">성별을 선택해주세요</p>{" "}
           {/* 안내 텍스트 */}
           <div className="flex items-center text-[#999]">
-            {" "}
             {/* 각 라디오 버튼 정렬 */}
             {/* 남성 */}
             <label className="flex items-center space-x-2 cursor-pointer mr-4">
