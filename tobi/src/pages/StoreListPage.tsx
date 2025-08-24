@@ -53,7 +53,7 @@ const StoreListPage: React.FC = () => {
   const searchStores = async () => {
     try {
       setLoading(true);
-      const response = await api.get<StoreListResponse[]>(
+      const response = await api.get<StoreListResponse>(
         "/api/stores/search",
         {
           params: {
