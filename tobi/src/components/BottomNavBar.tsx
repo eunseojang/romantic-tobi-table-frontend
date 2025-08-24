@@ -26,7 +26,7 @@ const BottomHandleBar: React.FC = () => {
           ${
             isOpen
               ? "translate-y-0"
-              : "translate-y-[calc(100%-2.5rem)]" /* 👈 핵심: 40px 만큼만 보임 */
+              : "translate-y-[calc(100%-2.3rem)]" /* 👈 핵심: 40px 만큼만 보임 */
           }
         `}
       >
@@ -35,7 +35,7 @@ const BottomHandleBar: React.FC = () => {
           onClick={toggleMenu}
           className="flex justify-center cursor-pointer mb-2"
         >
-          <div className="w-40 h-2 bg-[#413529] rounded-full"></div>
+          <div className="w-40 h-1.5 bg-[#413529] rounded-full mb-2"></div>
         </div>
 
         {/* 메뉴 아이템 */}

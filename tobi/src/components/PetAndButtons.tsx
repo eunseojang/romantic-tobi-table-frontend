@@ -112,9 +112,15 @@ const PetAndButtons: React.FC = () => {
   const renderPlaceholder = () => {
     switch (activeComponent) {
       case "feed":
-        return <FeedMenu />;
+        return (
+          <FeedMenu onSuccessAction={() => handleActionWithTimeout("up")} />
+        );
       case "receipt":
-        return <ReceiptUpload onSuccessAction={() => handleActionWithTimeout('up')} />;
+        return (
+          <ReceiptUpload
+            onSuccessAction={() => handleActionWithTimeout("up")}
+          />
+        );
       default:
         return null;
     }

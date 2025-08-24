@@ -13,6 +13,11 @@ const config: Config = {
       fontFamily: {
         dotum: ["Dotum", "sans-serif"],
         romance: ["Romance", "sans-serif"],
+      }, // tailwind.config.js 또는 tailwind.config.ts
+
+      backgroundImage: {
+        "tobi-gradient":
+          "linear-gradient(180deg, #FFFFFF 0%, #FAF4E7 25%, #F4EDDC 50%, #FDC63D 100%)",
       },
     },
   },

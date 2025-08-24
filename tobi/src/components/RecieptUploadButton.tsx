@@ -3,7 +3,6 @@
 import React, { useRef, useState } from "react";
 import api from "@/api";
 import { FaSpinner } from "react-icons/fa";
-import axios from "axios";
 import { toaster } from "./ui/toaster";
 
 // API 응답 타입 정의 (성공 및 실패 케이스 모두 포함)
@@ -71,25 +70,12 @@ const ReceiptUploadButton: React.FC<ReceiptUploadButtonProps> = ({
       setTimeout(() => {
         window.location.reload();
       }, 3000);
-    } catch (error: unknown) {
+    } catch (error) {
       console.error("영수증 업로드 실패:", error);
-      let errorMessage = "다시 시도해주세요.";
-      if (
-        axios.isAxiosError(error) &&
-        error.response &&
-        error.response.data &&
-        typeof error.response.data === "object" &&
-        "error" in error.response.data
-      ) {
-        errorMessage = (error.response.data as { error: string }).error;
-        console.log(error.response.data);
-      } else if (error instanceof Error) {
-        errorMessage = error.message;
-      }
 
       toaster.create({
         title: "영수증 인증 실패",
-        description: errorMessage,
+        description: "이미 인증된 영수증이거나 소상공인 가게가 아닙니다.",
         type: "error",
       });
     } finally {

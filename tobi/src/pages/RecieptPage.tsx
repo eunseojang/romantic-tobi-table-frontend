@@ -11,6 +11,7 @@ interface Receipt {
   storeName: string;
   amount: number;
   menu: string | null;
+  paymentDate: string;
 }
 
 const ReceiptListPage: React.FC = () => {
@@ -77,8 +78,13 @@ const ReceiptListPage: React.FC = () => {
                     {receipt.storeName}
                   </h3>
                 </div>
-                <div className="text-sm text-gray-500 whitespace-nowrap">
-                  {receipt.amount}원
+                <div className="flex-row text-right">
+                  <div className="text-sm text-gray-500 whitespace-nowrap">
+                    {receipt.paymentDate}
+                  </div>
+                  <div className="text-sm text-gray-500 whitespace-nowrap">
+                    {receipt.amount}원
+                  </div>
                 </div>
               </div>
             </div>

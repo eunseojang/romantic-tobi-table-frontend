@@ -10,7 +10,7 @@ const StartPage: React.FC = () => {
   const handleNextClick = () => {
     // 시작 페이지를 봤다는 플래그를 localStorage에 저장
     localStorage.setItem("hasSeenStartPage", "true");
-    navigate("/"); // 'home'은 예시 경로입니다. 실제 홈 페이지 경로로 변경하세요.
+    navigate("/levelup", { state: { level: 1 } });
   };
 
   return (

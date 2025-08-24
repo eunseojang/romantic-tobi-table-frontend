@@ -7,12 +7,18 @@ import { useNavigate } from "react-router-dom";
 import { toaster } from "@/components/ui/toaster";
 import PointDisplay from "@/components/PointDisplay";
 
-// API 응답 데이터 타입 정의
+// API 응답 데이터 타입 정의 (새로운 명세에 맞게)
 interface Reward {
-  id: number;
   rewardName: string;
-  point: number;
-  used: boolean;
+  value: number;
+  redeemed: boolean;
+}
+
+// 업적 기반 리워드 사용 API 응답 타입
+interface RedeemResponse {
+  rewardName: string;
+  value: number;
+  userRewardId: number;
 }
 
 const RewardListPage: React.FC = () => {
@@ -26,6 +32,7 @@ const RewardListPage: React.FC = () => {
     const fetchRewards = async () => {
       try {
         setLoading(true);
+        // ✨ GET /api/rewards API 호출
         const response = await api.get<Reward[]>("/api/rewards");
         setRewards(response.data);
       } catch (err) {
@@ -38,26 +45,36 @@ const RewardListPage: React.FC = () => {
     fetchRewards();
   }, []);
 
-  // 리워드 사용 핸들러
-  const handleRedeemReward = async (rewardId: number) => {
+  // ✨ 리워드 사용 핸들러 (업적 기반)
+  const handleRedeemReward = async () => {
+    if (!selectedReward) return;
+
     try {
-      const response = await api.post(`/api/rewards/${rewardId}/redeem`);
+      // ✨ POST /api/rewards/redeemByAchievement API 호출
+      await api.post<RedeemResponse>("/api/rewards/redeemByAchievement", {
+        rewardName: selectedReward.rewardName,
+      });
+
       toaster.create({
-        title: "리워드 사용 완료",
-        description: `${response.data.rewardName}을(를) 사용했습니다!`,
+        title: "기프티콘 획득 완료",
+        description: `${selectedReward.rewardName}을(를) 획득했습니다!`,
         type: "success",
       });
-      // UI를 즉시 업데이트
+
+      // UI 상태 업데이트: redeemed 상태를 true로 변경
       setRewards((prevRewards) =>
         prevRewards.map((reward) =>
-          reward.id === rewardId ? { ...reward, used: true } : reward
+          reward.rewardName === selectedReward.rewardName
+            ? { ...reward, redeemed: true }
+            : reward
         )
       );
+      setSelectedReward((prev) => (prev ? { ...prev, redeemed: true } : null));
     } catch (err) {
-      console.log(err);
-      const errorMessage = "리워드 사용에 실패했습니다.";
+      console.error("리워드 사용 실패:", err);
+      const errorMessage = "업적 달성 조건이 충족되지 않았습니다.";
       toaster.create({
-        title: "리워드 사용 실패",
+        title: "리워드 획득 실패",
         description: errorMessage,
         type: "error",
       });
@@ -90,31 +107,33 @@ const RewardListPage: React.FC = () => {
 
       {/* 안내 문구 */}
       <p className="text-sm text-gray-600 px-4 mt-2 mb-4 border-b border-gray-200 pb-2">
-        모아온 포인트들을 보상으로 바꿔보세요!
+        업적 달성으로 인한 기프티콘들을 사용해보세요!
       </p>
 
       {/* 리워드 목록 */}
       <div className="flex flex-col flex-grow overflow-y-auto p-4 pb-20 space-y-4">
         {rewards.map((reward) => (
           <div
-            key={reward.id}
+            key={reward.rewardName}
             onClick={() => setSelectedReward(reward)}
             className={`
-              w-full p-4 rounded-lg shadow-md border cursor-pointer transition-all duration-200
+              w-full p-4 rounded-lg shadow-md border border-[#F7A400] cursor-pointer transition-all duration-200
               ${
-                selectedReward?.id === reward.id
-                  ? "bg-[#FFF8E7] border-[#FDC63D] scale-[1.02]"
-                  : "bg-white border-gray-300"
+                selectedReward?.rewardName === reward.rewardName
+                  ? "bg-[#fff] border-[#F7A400] scale-[1.05]"
+                  : reward.redeemed
+                  ? "bg-[#FFF8E7] border-[#F7A400]"
+                  : "bg-white border-[#F7A400]"
               }
             `}
           >
             <p
               className={`text-lg font-bold ${
-                reward.used ? "text-gray-400" : "text-gray-800"
+                reward.redeemed ? "text-gray-400" : "text-gray-800"
               }`}
             >
               {reward.rewardName}
-              {reward.used && (
+              {reward.redeemed && (
                 <span className="text-xs text-red-500 ml-2">(사용완료!)</span>
               )}
             </p>
@@ -133,7 +152,9 @@ const RewardListPage: React.FC = () => {
             ></div>
 
             {/* 이미지 컨테이너 (임시) */}
-            <div className="w-48 h-32 bg-gray-200 rounded-lg"></div>
+            <div className="w-48 h-32 bg-gray-200 flex rounded-lg justify-center items-center">
+              <p>추가 예정</p>
+            </div>
 
             <p className="mt-4 text-xl font-bold text-gray-800">
               {selectedReward.rewardName}
@@ -144,18 +165,18 @@ const RewardListPage: React.FC = () => {
 
             {/* 기프티콘 코드 버튼 */}
             <button
-              onClick={() => handleRedeemReward(selectedReward.id)}
-              disabled={selectedReward.used}
+              onClick={handleRedeemReward}
+              disabled={selectedReward.redeemed}
               className={`
                 w-full mt-4 py-3 rounded-lg shadow-md font-bold text-lg transition-colors
                 ${
-                  selectedReward.used
+                  selectedReward.redeemed
                     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                     : "bg-[#FDC63D] text-white hover:bg-tobi-yellow-400"
                 }
               `}
             >
-              {selectedReward.used ? "사용 완료" : "기프티콘 코드"}
+              {selectedReward.redeemed ? "사용 완료" : "기프티콘 획득"}
             </button>
           </div>
         </div>

@@ -14,6 +14,7 @@ import PasswordChangePage from "./pages/PasswordChangePage";
 import ReceiptListPage from "./pages/RecieptPage";
 import RewardListPage from "./pages/RewardListPage";
 import PointShopPage from "./pages/PointShopPage";
+import LevelUpPage from "./pages/LevelupPage";
 
 const router = createBrowserRouter([
   {
@@ -79,6 +80,10 @@ const router = createBrowserRouter([
       {
         path: "/rewards",
         element: <RewardListPage />,
+      },
+      {
+        path: "/levelup",
+        element: <LevelUpPage />,
       },
     ],
   },

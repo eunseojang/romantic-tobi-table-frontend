@@ -26,7 +26,11 @@ const feedItems: FeedItem[] = [
   { name: "스테이크", points: 500, image: pizzaImage },
 ];
 
-const FeedMenu: React.FC = () => {
+interface FeedMenuProps {
+  onSuccessAction?: () => void;
+}
+
+const FeedMenu: React.FC<FeedMenuProps> = ({ onSuccessAction }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -40,6 +44,10 @@ const FeedMenu: React.FC = () => {
         type: "success",
       });
 
+      if (onSuccessAction) {
+        onSuccessAction();
+      }
+
       setTimeout(() => {
         window.location.reload();
       }, 3000); // 3000ms = 3초
@@ -47,8 +55,7 @@ const FeedMenu: React.FC = () => {
       console.error("밥 먹이기 실패:", error);
       toaster.create({
         title: "밥 먹이기 실패",
-        description:
-          "포인트가 부족하거나 오류가 발생했습니다.",
+        description: "포인트가 부족하거나 오류가 발생했습니다.",
         type: "error",
       });
     }
@@ -85,7 +92,7 @@ const FeedMenu: React.FC = () => {
         <button
           onClick={() => scroll(-200)}
           className="absolute left-0 z-10 p-2 bg-white rounded-full shadow-md text-gray-600 hover:text-gray-900 focus:outline-none transition-opacity"
-        > 
+        >
           <FaChevronLeft />
         </button>
       )}
