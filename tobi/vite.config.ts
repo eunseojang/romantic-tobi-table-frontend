@@ -23,9 +23,9 @@ export default defineConfig({
         navigateFallbackDenylist: [/^\/api\//], // API 요청은 제외합니다.
       },
       manifest: {
-        name: "낭만 토비의 밥상",
-        short_name: "낭만 토비의 밥상",
-        description: "모두 토비를 키우러 떠나지 않으실래요?",
+        name: "낭만 토미의 밥상",
+        short_name: "낭만 토미의 밥상",
+        description: "모두 토미를 키우러 떠나지 않으실래요?",
         theme_color: "#FDC63D",
         icons: [
           {

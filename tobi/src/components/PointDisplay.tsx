@@ -38,6 +38,7 @@ const PointDisplay: React.FC = () => {
       } catch (err) {
         console.error("Failed to fetch pet data:", err);
         setError("포인트 정보를 불러오지 못했습니다.");
+        navigate("/");
       } finally {
         setLoading(false);
       }

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import 'react-datepicker/dist/react-datepicker.css';
 
 @import "./font.css"; /* ✨ 이 줄이 있는지, 경로가 맞는지 확인 */
 

@@ -1,7 +1,11 @@
 // src/pages/signup/SignUpStep2Form.tsx
-import { toaster } from "src/components/ui/toaster";
+
 import React from "react";
+import { toaster } from "src/components/ui/toaster";
 import ProgressBar from "src/components/ui/ProgressBar";
+import DatePicker from "react-datepicker"; // ✨ DatePicker 임포트
+import "react-datepicker/dist/react-datepicker.css"; // ✨ DatePicker CSS 임포트
+import { format } from "date-fns";
 
 interface SignUpStep2FormProps {
   formData: {
@@ -20,7 +24,6 @@ const SignUpStep2Form: React.FC<SignUpStep2FormProps> = ({
 }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // STEP 2 유효성 검사
     if (!formData.nickname || !formData.birthday || !formData.gender) {
       toaster.create({
         title: "유효성 검사 실패",
@@ -36,7 +39,7 @@ const SignUpStep2Form: React.FC<SignUpStep2FormProps> = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full flex flex-col flex-grow px-4 pb-4 font-Dotum"
+      className="w-full flex flex-col flex-grow px-4 pb-4 font-dotum"
     >
       <div className="space-y-4 flex-grow">
         {/* 닉네임 */}
@@ -48,23 +51,21 @@ const SignUpStep2Form: React.FC<SignUpStep2FormProps> = ({
           className="w-full p-3 rounded-lg border border-[#F7A400] bg-[#FFF8E7] placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#FDC63D]"
         />
         {/* 생년월일 */}
-        <input
-          type="date"
-          placeholder="생년월일 (YYYY-MM-DD)"
-          value={formData.birthday}
-          onChange={(e) => updateFormData({ birthday: e.target.value })}
-          className="w-full p-3 rounded-lg border border-[#F7A400] bg-[#FFF8E7] placeholder-[#999] text-[#999] focus:outline-none focus:ring-2 focus:ring-[#FDC63D]"
+        <DatePicker
+          selected={formData.birthday ? new Date(formData.birthday) : null}
+          onChange={(date) =>
+            updateFormData({ birthday: date ? format(date, "yyyy-MM-dd") : "" })
+          }
+          placeholderText="생년월일 (YYYY-MM-DD)"
+          dateFormat="yyyy-MM-dd"
+          className="w-full p-3 rounded-lg border border-[#F7A400] bg-[#FFF8E7] text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#FDC63D]"
+          wrapperClassName="w-full"
         />
         {/* 성별 선택 */}
         <div className="pt-2">
-          {" "}
-          {/* 상단 패딩 */}
-          <p className="text-[#999] mb-1">성별을 선택해주세요</p>{" "}
-          {/* 안내 텍스트 */}
-          <div className="flex items-center text-[#999]">
-            {/* 각 라디오 버튼 정렬 */}
-            {/* 남성 */}
-            <label className="flex items-center space-x-2 cursor-pointer mr-4">
+          <p className="text-gray-700 mb-1">성별을 선택해주세요</p>
+          <div className="flex justify-between items-center text-gray-700">
+            <label className="flex items-center space-x-2 cursor-pointer">
               <input
                 type="radio"
                 name="gender"
@@ -77,8 +78,7 @@ const SignUpStep2Form: React.FC<SignUpStep2FormProps> = ({
               />
               <span>남성</span>
             </label>
-            {/* 여성 */}
-            <label className="flex items-center space-x-2 cursor-pointer mr-4">
+            <label className="flex items-center space-x-2 cursor-pointer">
               <input
                 type="radio"
                 name="gender"
@@ -87,27 +87,25 @@ const SignUpStep2Form: React.FC<SignUpStep2FormProps> = ({
                 onChange={(e) =>
                   updateFormData({ gender: e.target.value as "FEMALE" })
                 }
-                className="form-radio h-5 w-5 text-[#FDC63D] border-[#F7A400] focus:ring-[#FDC63D]"
+                className="form-radio h-5 w-5 text-[#FDC63D] border-[#F7A400] focus:ring-[#F7A400]"
               />
               <span>여성</span>
             </label>
-            {/* 선택 안 함 */}
-            <label className="flex items-center space-x-2 cursor-pointer mr-4">
+            <label className="flex items-center space-x-2 cursor-pointer">
               <input
                 type="radio"
                 name="gender"
-                value="OTHER" // 또는 "NONE" 등 원하는 값으로 설정
+                value="OTHER"
                 checked={formData.gender === "OTHER"}
                 onChange={(e) =>
                   updateFormData({ gender: e.target.value as "OTHER" })
                 }
-                className="form-radio h-5 w-5 text-[#FDC63D] border-[#F7A400] focus:ring-[#FDC63D]"
+                className="form-radio h-5 w-5 text-[#FDC63D] border-[#F7A400] focus:ring-[#F7A400]"
               />
               <span>선택 안 함</span>
             </label>
           </div>
         </div>
-        {/* ✨ 라디오 버튼 그룹 끝 */}
       </div>
 
       <ProgressBar currentStep={2} totalSteps={3} />
@@ -115,7 +113,7 @@ const SignUpStep2Form: React.FC<SignUpStep2FormProps> = ({
       <div className="w-full pt-4 pb-4">
         <button
           type="submit"
-          className="w-full bg-[#FDC63D] hover:bg-tobi-yellow-400 text-white  py-3 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center justify-center space-x-2"
+          className="w-full bg-[#FDC63D] hover:bg-tobi-yellow-400 text-white py-3 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center justify-center space-x-2 font-bold"
         >
           <span>다음으로</span>
           <svg

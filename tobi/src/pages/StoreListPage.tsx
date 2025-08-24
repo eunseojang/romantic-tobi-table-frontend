@@ -1,8 +1,8 @@
 // src/pages/StoreListPage.tsx
 
 import React, { useEffect, useState } from "react";
-import api from "@/api"; // Axios 인스턴스
-import { FaChevronLeft } from "react-icons/fa"; // 뒤로가기 아이콘
+import api from "@/api";
+import { FaChevronLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import PointDisplay from "@/components/PointDisplay";
 import BottomHandleBar from "@/components/BottomNavBar";
@@ -18,8 +18,10 @@ interface Store {
 interface StoreListResponse {
   content: Store[];
   totalPages: number;
-  totalElements: number;
-  // ... 기타 pagination 정보
+  pageable: {
+    pageNumber: number;
+  };
+  last: boolean;
 }
 
 const StoreListPage: React.FC = () => {
@@ -28,19 +30,44 @@ const StoreListPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentSearchTerm, setCurrentSearchTerm] = useState(""); // 실제 검색에 사용된 검색어
+  const [currentPage, setCurrentPage] = useState(0);
+  const [isLastPage, setIsLastPage] = useState(false);
+  const PAGE_SIZE = 10;
 
-  // 가게 목록을 불러오는 함수
-  const fetchStores = async () => {
+  // ✨ 데이터를 불러오는 핵심 함수 (검색, 더보기 모두 처리)
+  const fetchData = async (
+    page: number,
+    term: string = "",
+    isLoadMore: boolean = false
+  ) => {
     try {
       setLoading(true);
-      const response = await api.get<StoreListResponse>("/api/stores", {
-        params: {
-          page: 0,
-          size: 20,
-          sort: "id",
-        },
+      const endpoint = term ? "/api/stores/search" : "/api/stores";
+      const params = {
+        page: page,
+        size: PAGE_SIZE,
+        sort: "id",
+        ...(term && { name: term }),
+      };
+
+      console.log("API 요청:", { endpoint, params, isLoadMore }); // 디버깅용
+
+      const response = await api.get<StoreListResponse>(endpoint, { params });
+
+      console.log("API 응답:", response.data); // 디버깅용
+
+      setStores((prevStores) => {
+        if (isLoadMore) {
+          return [...prevStores, ...response.data.content];
+        } else {
+          return response.data.content;
+        }
       });
-      setStores(response.data.content);
+
+      setCurrentPage(response.data.pageable.pageNumber);
+      setIsLastPage(response.data.last);
+      setError(null);
     } catch (err) {
       console.error("Failed to fetch stores:", err);
       setError("가게 목록을 불러오지 못했습니다.");
@@ -49,38 +76,34 @@ const StoreListPage: React.FC = () => {
     }
   };
 
-  // 가게 검색 함수
-  const searchStores = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get<StoreListResponse>(
-        "/api/stores/search",
-        {
-          params: {
-            name: searchTerm,
-          },
-        }
-      );
-      setStores(response.data.content);
-    } catch (err) {
-      console.error("Failed to search stores:", err);
-      setError("검색 결과를 불러오지 못했습니다.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // 초기 데이터 로드 (검색어 변경과 분리)
   useEffect(() => {
-    fetchStores();
+    fetchData(0);
   }, []);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchTerm.trim()) {
-      searchStores();
-    } else {
-      fetchStores(); // 검색어가 없으면 전체 목록을 다시 불러옴
-    }
+    const trimmedTerm = searchTerm.trim();
+    setCurrentSearchTerm(trimmedTerm); // 현재 검색어 저장
+    setStores([]);
+    setCurrentPage(0);
+    setIsLastPage(false);
+    fetchData(0, trimmedTerm);
+  };
+
+  const handleLoadMore = () => {
+    const nextPage = currentPage + 1;
+    console.log("더보기 클릭:", { currentPage, nextPage, currentSearchTerm }); // 디버깅용
+    fetchData(nextPage, currentSearchTerm, true); // isLoadMore = true
+  };
+
+  const handleSearchClear = () => {
+    setSearchTerm("");
+    setCurrentSearchTerm("");
+    setStores([]);
+    setCurrentPage(0);
+    setIsLastPage(false);
+    fetchData(0);
   };
 
   return (
@@ -117,18 +140,39 @@ const StoreListPage: React.FC = () => {
         />
         <button
           type="submit"
-          className="bg-[#FDC63D] w-15 hover:bg-tobi-yellow-400 text-[#5C4B3B] py-3.5 px-3 rounded-lg shadow-sm transition duration-300 ease-in-out text-sm whitespace-nowrap"
+          className="bg-[#FDC63D] cursor-pointer hover:bg-tobi-yellow-400 text-[#5C4B3B] py-3.5 px-3 rounded-lg shadow-sm transition duration-300 ease-in-out text-sm whitespace-nowrap"
         >
           검색
         </button>
+        {currentSearchTerm && (
+          <button
+            type="button"
+            onClick={handleSearchClear}
+            className="bg-gray-500 hover:bg-gray-600 text-white py-3.5 px-3 rounded-lg shadow-sm transition duration-300 ease-in-out text-sm whitespace-nowrap"
+          >
+            전체
+          </button>
+        )}
       </form>
 
+      {/* 현재 검색어 표시 */}
+      {currentSearchTerm && (
+        <div className="px-4 mb-2">
+          <p className="text-sm text-gray-600">
+            검색 결과:{" "}
+            <span className="font-semibold">"{currentSearchTerm}"</span>
+          </p>
+        </div>
+      )}
+
       {/* 가게 목록 */}
-      <div className="flex flex-col flex-grow overflow-y-auto px-4 pb-20 space-y-4">
-        {loading ? (
+      <div className="flex flex-col flex-grow overflow-y-auto px-4 pb-4 space-y-4">
+        {loading && stores.length === 0 ? (
           <p className="text-center text-gray-500">목록을 불러오는 중...</p>
         ) : error ? (
           <p className="text-center text-red-500">{error}</p>
+        ) : stores.length === 0 ? (
+          <p className="text-center text-gray-500">가게가 없습니다.</p>
         ) : (
           stores.map((store) => (
             <div
@@ -147,6 +191,25 @@ const StoreListPage: React.FC = () => {
           ))
         )}
       </div>
+
+      {/* "더보기" 버튼 */}
+      {!loading && !isLastPage && stores.length > 0 && (
+        <div className="w-full px-4 mb-20 cursor-pointer" onClick={handleLoadMore}>
+          <button
+            disabled={loading}
+            className="w-full cursor-pointer py-3 bg-[#FDC63D] rounded-lg shadow-md hover:bg-tobi-yellow-400 text-white font-bold transition-colors duration-200 disabled:opacity-50"
+          >
+            더보기
+          </button>
+        </div>
+      )}
+
+      {/* 로딩 상태 */}
+      {loading && stores.length > 0 && (
+        <div className="w-full px-4 mb-4">
+          <p className="text-center text-gray-500">더 불러오는 중...</p>
+        </div>
+      )}
 
       <BottomHandleBar />
     </div>
