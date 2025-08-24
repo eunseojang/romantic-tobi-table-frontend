@@ -26,7 +26,7 @@ const BottomHandleBar: React.FC = () => {
           ${
             isOpen
               ? "translate-y-0"
-              : "translate-y-[calc(100%-2rem)]" /* 👈 핵심: 40px 만큼만 보임 */
+              : "translate-y-[calc(100%-2.5rem)]" /* 👈 핵심: 40px 만큼만 보임 */
           }
         `}
       >
@@ -35,11 +35,11 @@ const BottomHandleBar: React.FC = () => {
           onClick={toggleMenu}
           className="flex justify-center cursor-pointer mb-2"
         >
-          <div className="w-30 h-1 bg-[#413529] rounded-full"></div>
+          <div className="w-40 h-2 bg-[#413529] rounded-full"></div>
         </div>
 
         {/* 메뉴 아이템 */}
-        <div className="flex justify-around items-center text-[#5C4B3B] font-bold text-lg">
+        <div className="flex mt-3 justify-around items-center text-[#5C4B3B] font-bold text-lg">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.href;
 
