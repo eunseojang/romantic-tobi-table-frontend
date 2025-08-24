@@ -95,16 +95,14 @@ const PetAndButtons: React.FC = () => {
         description: errorMessage,
         type: "error",
       });
-      handleActionWithTimeout("basic", 0); // ✨ 실패 시 기본 동작 유지
+      handleActionWithTimeout("hi", 3000); // ✨ 실패 시 기본 동작 유지
     }
   };
 
   const handleButtonClick = (componentName: ActiveComponent) => {
     setActiveComponent((prevComponent) => {
       const newState = prevComponent === componentName ? "none" : componentName;
-      if (newState !== "none") {
         handleActionWithTimeout("hi", 1000); // ✨ 버튼 클릭 시 1초간 "up" 동작
-      }
       return newState;
     });
   };
