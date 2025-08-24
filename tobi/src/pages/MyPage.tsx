@@ -16,6 +16,16 @@ interface UserInfo {
   petLevel: number; // 뱃지 텍스트
   latestAchievementName: string; // 업적 텍스트
 }
+export type BadgeType = {
+  [key: number]: string;
+};
+const badge: BadgeType = {
+  1: "맨바닥 식객",
+  2: "신문지 위의 미식가",
+  3: "반상 챌린저",
+  4: "가정식 정복자",
+  5: "황금수저 계승자",
+};
 
 const MyPage: React.FC = () => {
   const navigate = useNavigate();
@@ -64,15 +74,18 @@ const MyPage: React.FC = () => {
 
             <div className="flex flex-col flex-grow space-y-1">
               {/* 레벨 및 뱃지 */}
-              <div className="flex items-center space-x-2">
-                <span className="text-xs font-bold text-[#FDC63D] bg-[#FFF8E7] font-Romance rounded-full px-2 py-1 flex items-center shadow-sm">
+              <div className="flex items-center justify-start">
+                <span className="text-md font-bold text-[#FDC63D] font-Romance pr-2 flex items-center">
                   <FaCrown className="text-[#FDC63D] mr-1" /> Lv.{" "}
                   {userInfo.petLevel}
+                </span>
+                <span className="text-xs font-Romance text-[#5C4B3B] font-Romance flex items-center">
+                  {badge[userInfo.petLevel]}
                 </span>
               </div>
 
               {/* 닉네임 및 생일 */}
-              <h2 className="text-xl font-bold text-gray-800">
+              <h2 className="text-xl font-bold text-gray-800 mt-[-3px]">
                 {userInfo.nickname}{" "}
                 <p className="text-sm text-[#5C4B3B] flex items-center ">
                   <img
